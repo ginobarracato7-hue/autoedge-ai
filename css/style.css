@@ -880,22 +880,27 @@ body {
   .system-card--wide {
     grid-column: auto;
   }
+  /* Stack ea-inner, tighten gap */
   .ea-inner {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 1.5rem;
   }
+  /* Kill the 100vh that creates blank space when content stacks */
+  .hero { min-height: auto; }
   .hero-inner {
     grid-template-columns: 1fr;
     text-align: center;
-    padding: 3rem 2rem 4rem;
-    gap: 3rem;
+    padding: 2rem 1.5rem 2.5rem;
+    gap: 1.75rem;
   }
   .hero-visual { justify-content: center; }
-  .hero-sub { margin: 0 auto 2.5rem; }
+  .hero-sub { margin: 0 auto 2rem; }
   .hero-btns { justify-content: center; }
   .badge-top  { right: -20px; }
   .badge-bottom { left: -30px; }
   .benefits-grid { grid-template-columns: 1fr; }
+  /* Tighten benefits image bottom margin */
+  .benefits-img-wrap { margin-bottom: 1.5rem; }
   .pricing-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
   .service-row { grid-template-columns: 3rem 1fr; }
   .svc-price, .svc-btn { grid-column: 2; }
@@ -906,8 +911,38 @@ body {
 @media (max-width: 600px) {
   :root { --nav-h: 58px; }
   .nav-links a:not(.nav-cta) { display: none; }
-  .hero-text h1 { font-size: 2.4rem; }
-  .phone-wrap { width: 220px; }
+  .hero-text h1 { font-size: 2.2rem; }
+
+  /* Tighter hero on small phones */
+  .hero-inner { padding: 1rem 1rem 1.5rem; gap: 1.25rem; }
+  .hero-sub { margin-bottom: 1.5rem; }
+
+  /* Smaller phone mockup — fits without side overflow */
+  .phone-wrap { width: 190px; margin: 0 auto; }
+
+  /* Hide badges — they overflow off-screen on small phones */
   .badge-top, .badge-bottom { display: none; }
-  .section { padding: 3rem 0; }
+
+  /* Hide scroll hint — saves vertical space */
+  .scroll-hint { display: none; }
+
+  /* Tighter section padding */
+  .section { padding: 2.5rem 0; }
+
+  /* Benefits image — less gap below */
+  .benefits-img-wrap { margin-bottom: 1rem; }
+
+  /* EA section — minimal gap between stacked image + text */
+  .ea-inner { gap: 1rem; }
+
+  /* Ensure images never overflow or get fixed heights */
+  .ea-img,
+  .benefits-img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+
+  /* Pricing — full width on small screens, remove 440px cap */
+  .pricing-grid { max-width: 100%; }
 }
