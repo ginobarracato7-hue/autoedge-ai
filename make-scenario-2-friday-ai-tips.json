@@ -1,0 +1,95 @@
+{
+  "scenario": {
+    "name": "Newsletter - Friday AI Tips",
+    "description": "Every Friday at 2:00 PM, generates AI tip using Claude and emails all newsletter subscribers",
+    "active": true,
+    "modules": [
+      {
+        "id": 1,
+        "name": "Schedule - Weekly Trigger",
+        "type": "trigger",
+        "app": "schedule",
+        "action": "trigger",
+        "settings": {
+          "type": "weekly",
+          "dayOfWeek": "Friday",
+          "hour": 14,
+          "minute": 0,
+          "timezone": "America/New_York"
+        }
+      },
+      {
+        "id": 2,
+        "name": "Google Sheets - Get All Rows",
+        "type": "action",
+        "app": "googlesheets",
+        "action": "getAllRows",
+        "connections": {
+          "account": "YOUR_GOOGLE_ACCOUNT"
+        },
+        "settings": {
+          "spreadsheetId": "1t-BHvIiIQfQhQLPgJFw-TOS5dTuoG8PRO4awcJBBKew",
+          "sheetName": "Sheet1"
+        },
+        "output": [
+          "first_name",
+          "email",
+          "subscribed_at",
+          "source"
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Array Iterator",
+        "type": "iterator",
+        "app": "arrayiterator",
+        "action": "iterate",
+        "settings": {
+          "array": "{{2.rows}}"
+        }
+      },
+      {
+        "id": 4,
+        "name": "HTTP - Call Claude API",
+        "type": "action",
+        "app": "http",
+        "action": "request",
+        "settings": {
+          "url": "https://api.anthropic.com/v1/messages",
+          "method": "POST",
+          "headers": [
+            {
+              "key": "x-api-key",
+              "value": "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"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "raw": "{\"model\": \"claude-opus-4-8\", \"max_tokens\": 600, \"messages\": [{\"role\": \"user\", \"content\": \"Write a SHORT, actionable AI tip for service business owners (roofers, HVAC, plumbers, contractors). Help them save time, get more leads, or close more jobs using AI. Keep it 120 words max. Be specific and practical. End with ONE action they can take TODAY. Format: **[TITLE]** - [TIP] - [ACTION]\"}]}"
+          }
+        },
+        "output": [
+          "content"
+        ]
+      },
+      {
+        "id": 5,
+        "name": "Gmail - Send Email",
+        "type": "action",
+        "app": "gmail",
+        "action": "sendEmail",
+        "connections": {
+          "account": "YOUR_GMAIL_ACCOUNT"
+        },
+        "settings": {
+          "to": "{{3.value.2}}",
+          "subject": "Weekly AI Tip for Your Service Business",
+          "body": "Hi {{3.value.1}},\n\nHere's this week's AI strategy:\n\n{{4.result}}\n\n---\n\nQuestions? Reply to this email.\n\nReady to automate your service business?\nText 410-831-1858 or visit autoedge-ai.com\n\nAutoEdge AI"
+        }
+      }
+    ]
+  }
+}

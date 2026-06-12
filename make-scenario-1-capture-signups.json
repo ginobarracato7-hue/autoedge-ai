@@ -1,0 +1,46 @@
+{
+  "scenario": {
+    "name": "Newsletter - Capture Signups",
+    "description": "Captures newsletter signups from autoedge-ai.com form and stores in Google Sheets",
+    "active": true,
+    "modules": [
+      {
+        "id": 1,
+        "name": "Webhooks - Custom Webhook",
+        "type": "trigger",
+        "app": "webhooks",
+        "action": "customWebhook",
+        "settings": {
+          "name": "Newsletter Signup Form"
+        },
+        "output": [
+          "first_name",
+          "email",
+          "subscribed_at",
+          "source"
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Google Sheets - Add a Row",
+        "type": "action",
+        "app": "googlesheets",
+        "action": "addRow",
+        "connections": {
+          "account": "YOUR_GOOGLE_ACCOUNT"
+        },
+        "settings": {
+          "spreadsheetId": "1t-BHvIiIQfQhQLPgJFw-TOS5dTuoG8PRO4awcJBBKew",
+          "sheetName": "Sheet1",
+          "columnMapping": {
+            "first_name": "{{1.first_name}}",
+            "email": "{{1.email}}",
+            "subscribed_at": "{{1.subscribed_at}}",
+            "source": "{{1.source}}"
+          }
+        }
+      }
+    ],
+    "webhookUrl": "https://hook.make.com/[YOUR_WEBHOOK_ID]"
+  }
+}
