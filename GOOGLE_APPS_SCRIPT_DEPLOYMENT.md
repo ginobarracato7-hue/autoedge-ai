@@ -182,16 +182,13 @@ git push origin main
 
 ## After Friday's First Email
 
-**Important: Regenerate Claude API Key**
-
-Your API key is now in the Apps Script. For security:
+**Important: Add Your Claude API Key**
 
 1. Go to [console.anthropic.com](https://console.anthropic.com)
-2. Click **API Keys**
-3. Delete: `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`
-4. Create a new key
-5. Update the Apps Script with the new key:
-   - In Apps Script, change: `const CLAUDE_API_KEY = 'your-new-key'`
+2. Click **API Keys** and copy your key
+3. Update the Apps Script with your key:
+   - In Apps Script, change: `const CLAUDE_API_KEY = 'YOUR_CLAUDE_API_KEY_HERE'` 
+   - Paste your actual API key
    - Click **Save**
    - Click **Run** to test
 
