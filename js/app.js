@@ -116,3 +116,53 @@ document.querySelectorAll('.btn-primary').forEach(btn => {
     );
   });
 });
+
+/* ── Newsletter form submission ── */
+const newsletterForm = document.getElementById('newsletter-form');
+if (newsletterForm) {
+  newsletterForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const firstName = document.getElementById('nl-first-name').value.trim();
+    const email = document.getElementById('nl-email').value.trim();
+
+    if (!firstName || !email) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    const payload = {
+      first_name: firstName,
+      email: email,
+      subscribed_at: new Date().toISOString(),
+      source: 'website_newsletter'
+    };
+
+    /* Replace with your webhook URL (Google Sheets, n8n, Zapier, etc.) */
+    const WEBHOOK_URL = 'YOUR_WEBHOOK_URL_HERE';
+
+    try {
+      if (WEBHOOK_URL !== 'YOUR_WEBHOOK_URL_HERE') {
+        await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          mode: 'no-cors'
+        });
+      }
+    } catch (err) {
+      console.warn('Newsletter signup note:', err.message);
+    }
+
+    /* Show success message */
+    newsletterForm.style.display = 'none';
+    document.getElementById('newsletter-success').style.display = 'block';
+
+    /* Reset form for next visitor after a delay */
+    setTimeout(() => {
+      newsletterForm.reset();
+      newsletterForm.style.display = 'flex';
+      document.getElementById('newsletter-success').style.display = 'none';
+    }, 5000);
+  });
+}
